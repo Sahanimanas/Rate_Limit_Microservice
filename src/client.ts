@@ -2,7 +2,7 @@ import grpc from '@grpc/grpc-js';
 import grpcloader from '@grpc/proto-loader';
 import path from 'path';
 
-const PROTO_PATH = path.join(import.meta.dirname, 'ratelimit.proto');
+const PROTO_PATH = path.join(import.meta.dirname, 'proto/ratelimit.proto');
 const protodefinition = grpcloader.loadSync(PROTO_PATH);
 const proto = grpc.loadPackageDefinition(protodefinition).ratelimiter;
 const client = new (proto as any).ratelimit('localhost:50051', grpc.credentials.createInsecure());
