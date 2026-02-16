@@ -3,17 +3,11 @@ import grpcloader from '@grpc/proto-loader';
 import path from 'path';
 
 const PROTO_PATH = path.join(import.meta.dirname, 'ratelimit.proto');
-
 const protodefinition = grpcloader.loadSync(PROTO_PATH);
-
 const proto = grpc.loadPackageDefinition(protodefinition).ratelimiter;
-
 const client = new (proto as any).ratelimit('localhost:50051', grpc.credentials.createInsecure());
 
 async function testRatelimit(userId:number = 1) {
- 
-
-  for (let i = 0; i < 15; i++) {
     client.checklimit({ userid: userId }, (err: any, response: any) => {
       if (err) {
         console.error('Error:', err);
@@ -21,8 +15,6 @@ async function testRatelimit(userId:number = 1) {
         console.log(`Request: User ${userId} - Count: ${response.count}, Allowed: ${response.allowed}`);
       }
     });
-}
-
   // Give time for all requests to complete
   setTimeout(() => {
     process.exit(0);
@@ -31,9 +23,3 @@ async function testRatelimit(userId:number = 1) {
 
 
 testRatelimit(1);
-// testRatelimit(2);
-// testRatelimit(3);
-// testRatelimit(4);
-// testRatelimit(5);
-// testRatelimit(6);
-// testRatelimit(7);

@@ -2,12 +2,9 @@ import grpc from '@grpc/grpc-js';
 import grpcloader from '@grpc/proto-loader';
 import {Redis} from 'ioredis';
 import path from 'path';
-// import Redis from 'ioredis';
 
 const PROTO_PATH  = path.join(import.meta.dirname, 'ratelimit.proto');
-
 const protodefinition = grpcloader.loadSync(PROTO_PATH);
-
 const proto = grpc.loadPackageDefinition(protodefinition).ratelimiter;
 
 const redis = new Redis({
@@ -22,8 +19,8 @@ redis.on('error', (err) => {
 });
 
 
-const MAX_REQUESTS = 10;
-const WINDOW_SIZE = 60; // seconds
+const MAX_REQUESTS = parseInt(process.env.MAX_REQUESTS || '10', 10);
+const WINDOW_SIZE = parseInt(process.env.TIME_WINDOW || '60000', 10)/1000; // seconds
 
 async function checklimit(call: any, callback: any) {
   const userId = call.request.userid;
