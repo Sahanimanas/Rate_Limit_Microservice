@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+
+package ratelimiter;
+
+
+service ratelimit{
+    rpc Checklimit(request) returns(response);
+}
+
+
+message request{
+    int32 userid = 1;
+
+}
+
+message response{
+    int32 count=1;
+    string allowed =2;
+}
